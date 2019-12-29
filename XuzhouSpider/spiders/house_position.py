@@ -16,3 +16,8 @@ class HousePositionSpider(scrapy.Spider):
             item['address']=house.xpath('./dl/dd[@class="dd-item address"]/span/a/span/text()').extract()
             item['price']=house.xpath('./dl/dd[@class="dd-item info"]/div/span[@class="num"]/text()').extract()
             yield item
+        new_links = response.xpath('//div[@class="pageBox"]/a[@class="next"]/@href').extract()
+        if new_links and len(new_links)>0:
+            new_link = new_links[0]
+            yield scrapy.Request(new_link,callback=self.parse)
+
