@@ -4,17 +4,37 @@ import pygal
 filename='Xuzhouhouse.json'
 with open(filename,'r',True,'utf-8') as f:
     house_list=json.load(f)
-adict1 = {'小于50平米':0,'50-75平米':0,'75-100平米':0,'大于100平米':0}
-adict2 = {'南向':0,'南北向':0,'北向':0}
-adict3 = {'毛坯':0,'简单装修':0,'精装修':0,'豪华装修':0}
-adict4 = {'小于1000':0,'1000-1500':0,'1500-2000':0,'大于2000':0}
+adict0 = {'1室1厅1卫':0,'2室1厅1卫':0,'2室2厅1卫':0,'3室2厅1卫':0,'其他':0}
+adict1 = {'小于50平米':0,'50-75平米':0,'75-100平米':0,'大于100平米':0,'其他':0}
+adict2 = {'南向':0,'南北向':0,'北向':0,'其他':0}
+adict3 = {'毛坯':0,'简单装修':0,'中等装修':0,'精装修':0,'豪华装修':0,'其他':0}
+adict4 = {'小于1000':0,'1000-1500':0,'1500-2000':0,'大于2000':0,'其他':0}
 
+#房间数
+for house_dict in house_list:
+    str_size0=""
+    try:
+        for size0 in house_dict['size'][0]:
+            str_size0+=size0
+        if str_size0 == '1室1厅1卫':
+            adict0['1室1厅1卫']+=1
+        elif str_size0 == '2室1厅1卫':
+            adict0['2室1厅1卫']+=1
+        elif str_size0 == '2室2厅1卫':
+            adict0['2室2厅1卫']+=1
+        elif str_size0 =='3室2厅1卫':
+            adict0['3室2厅1卫']+=1 
+        else:
+            adict0['其他']+=1
+    except:
+        print('装修有误')
 
-#     for size0 in house_dict['size'][0]:
-#         if size0 == "1室1厅1卫":
-#             dict0["1室1厅1卫"]+=1
-#         elif size0=="2室1厅1卫":
-#             dict0["2室1厅1卫"]+=1
+pie0 = pygal.Pie()
+for k in adict0.keys():
+    pie0.add(k , adict0[k])
+pie0.title="二手房屋房间数"
+pie0.legend_at_bottom = True
+pie0.render_to_file('房间数.svg')
 
 #平方占比
 for house_dict in house_list:
@@ -33,6 +53,8 @@ for house_dict in house_list:
             adict1['75-100平米']+=1
         elif 100 <= int_size1 :
             adict1['大于100平米']+=1
+        else:
+            adict1['其他']+=1
     except:
         print("平方有误")
 
@@ -56,6 +78,8 @@ for house_dict in house_list:
             adict2['南北向']+=1
         elif str_size2 =='北向':
             adict2['北向']+=1
+        else:
+            adict2['其他']+=1
     except:
         print('朝向有误')
 
@@ -77,10 +101,14 @@ for house_dict in house_list:
             adict3['毛坯']+=1
         elif str_size3 == '简单装修':
             adict3['简单装修']+=1
+        elif str_size3 == '中等装修':
+            adict3['中等装修']+=1
         elif str_size3 =='精装修':
             adict3['精装修']+=1
         elif str_size3 =='豪华装修':
             adict3['豪华装修']+=1 
+        else:
+            adict3['其他']+=1
     except:
         print('装修有误')
 
@@ -106,6 +134,8 @@ for house_dict in house_list:
                 adict4['1500-2000']+=1
             elif 2000 <= int_price :
                 adict4['大于2000']+=1
+            else:
+                adict4['其他']+=1
     except:
         print("价格有误")
 
